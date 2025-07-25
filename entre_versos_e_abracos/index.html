@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Entre Versos e Abraços</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #fdf6f0;
+      color: #333;
+      text-align: center;
+    }
+    header {
+      background: #ffe3e3;
+      padding: 2rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    header h1 {
+      margin: 0;
+    }
+    header p.subtitle {
+      margin-top: 0.5rem;
+      font-style: italic;
+      color: #555;
+    }
+    header p.dedication {
+      margin-top: 1rem;
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    nav button {
+      margin: 0.5rem;
+      padding: 0.8rem 1.2rem;
+      border: none;
+      border-radius: 20px;
+      background: #ff9aa2;
+      color: white;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    section {
+      display: none;
+      padding: 2rem;
+    }
+    section.active {
+      display: block;
+    }
+    textarea {
+      width: 90%;
+      height: 200px;
+      padding: 1rem;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+      resize: vertical;
+    }
+    .gallery img {
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+      margin: 0.5rem;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+    audio {
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Entre Versos e Abraços</h1>
+    <p class="subtitle">Um espaço só nosso 💖</p>
+    <p class="dedication">Kimberly Gomes, mais conhecida como minha esposa, fiz este site pois sei que passo muito tempo longe por causa do trabalho, então sempre que você sentir saudade eu estarei aqui neste site para você.</p>
+    <nav>
+      <button onclick="showSection('poesias')">Escrever Poesia</button>
+      <button onclick="showSection('audios')">Ouvir Sua Voz</button>
+      <button onclick="showSection('fotos')">Memórias em Fotos</button>
+    </nav>
+  </header>
+
+  <section id="poesias" class="active">
+    <h2>Escreva aqui o que o coração mandar ✍️</h2>
+    <textarea placeholder="Escreva sua poesia..."></textarea>
+  </section>
+
+  <section id="audios">
+    <h2>Quando sentir saudade... ❤️</h2>
+    <p>Me ouça, sempre estarei com você.</p>
+    <audio controls>
+      <source src="audios/voz1.mp3" type="audio/mp3">
+      Seu navegador não suporta áudio.
+    </audio>
+  </section>
+
+  <section id="fotos">
+    <h2>Momentos nossos 📸</h2>
+    <div class="gallery">
+      <img src="fotos/foto1.jpg" alt="Foto 1">
+      <img src="fotos/foto2.jpg" alt="Foto 2">
+      <img src="fotos/foto3.jpg" alt="Foto 3">
+      <img src="fotos/foto4.jpg" alt="Foto 4">
+      <img src="fotos/foto5.jpg" alt="Foto 5">
+    </div>
+  </section>
+
+  <script>
+    function showSection(id) {
+      document.querySelectorAll('section').forEach(sec => {
+        sec.classList.remove('active');
+      });
+      document.getElementById(id).classList.add('active');
+    }
+  </script>
+</body>
+</html>
