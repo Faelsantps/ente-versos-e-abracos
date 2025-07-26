@@ -74,4 +74,154 @@
       background-color: #ffb6b9;
       color: white;
       font-size: 1rem;
-      cursor: point
+      cursor: pointer;
+      margin-bottom: 2rem;
+    }
+    .poesia-salva {
+      text-align: left;
+      max-width: 700px;
+      margin: 1rem auto;
+      padding: 1rem;
+      background: #fff5f5;
+      border-left: 4px solid #ff9aa2;
+      border-radius: 10px;
+    }
+    .poesia-salva h3 {
+      margin: 0 0 0.5rem 0;
+      color: #d94f4f;
+    }
+    .carousel {
+      position: relative;
+      max-width: 300px;
+      margin: 2rem auto;
+    }
+    .carousel img {
+      width: 100%;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+    .carousel button {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0,0,0,0.5);
+      color: white;
+      border: none;
+      padding: 0.5rem;
+      cursor: pointer;
+      font-size: 1.2rem;
+      border-radius: 50%;
+    }
+    .carousel .prev {
+      left: 0.5rem;
+    }
+    .carousel .next {
+      right: 0.5rem;
+    }
+    audio {
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Entre Versos e Abraços</h1>
+    <p class="subtitle">Um espaço só nosso 💖</p>
+    <p class="dedication">Kimberly Gomes, mais conhecida como minha esposa, fiz este site pois sei que passo muito tempo longe por causa do trabalho, então sempre que você sentir saudade eu estarei aqui neste site para você.</p>
+    <nav>
+      <button onclick="showSection('poesias')">Escrever Poesia</button>
+      <button onclick="showSection('audios')">Ouvir Sua Voz</button>
+      <button onclick="showSection('fotos')">Memórias em Fotos</button>
+    </nav>
+  </header>
+
+  <section id="poesias" class="active">
+    <h2>Escreva aqui o que o coração mandar ✍️</h2>
+    <input id="titulo-poesia" type="text" placeholder="Título da poesia...">
+    <textarea id="texto-poesia" placeholder="Escreva sua poesia..."></textarea>
+    <button class="save-btn" onclick="salvarPoesia()">Salvar Poesia</button>
+    <div id="lista-poesias"></div>
+  </section>
+
+  <section id="audios">
+    <h2>Quando sentir saudade... ❤️</h2>
+    <p>Me ouça, sempre estarei com você.</p>
+    <audio controls>
+      <source src="audios/voz1.mp3" type="audio/mp3">
+      Seu navegador não suporta áudio.
+    </audio>
+  </section>
+
+  <section id="fotos">
+    <h2>Momentos nossos 📸</h2>
+    <div class="carousel">
+      <button class="prev" onclick="changePhoto(-1)">&#8592;</button>
+      <img id="carousel-image" src="fotos/foto1.jpg" alt="Foto">
+      <button class="next" onclick="changePhoto(1)">&#8594;</button>
+    </div>
+    <audio id="music-fotos" src="audios/musica.mp3" loop></audio>
+  </section>
+
+  <script>
+    const sections = document.querySelectorAll('section');
+    const musicFotos = document.getElementById('music-fotos');
+
+    function showSection(id) {
+      sections.forEach(sec => sec.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+
+      if (id === 'fotos') {
+        musicFotos.play();
+      } else {
+        musicFotos.pause();
+        musicFotos.currentTime = 0;
+      }
+
+      if (id === 'poesias') carregarPoesias();
+    }
+
+    const fotos = [
+      'fotos/foto1.jpg',
+      'fotos/foto2.jpg',
+      'fotos/foto3.jpg',
+      'fotos/foto4.jpg',
+      'fotos/foto5.jpg'
+    ];
+    let currentIndex = 0;
+
+    function changePhoto(direction) {
+      currentIndex += direction;
+      if (currentIndex < 0) currentIndex = fotos.length - 1;
+      if (currentIndex >= fotos.length) currentIndex = 0;
+      document.getElementById('carousel-image').src = fotos[currentIndex];
+    }
+
+    function salvarPoesia() {
+      const titulo = document.getElementById('titulo-poesia').value.trim();
+      const texto = document.getElementById('texto-poesia').value.trim();
+      if (!titulo || !texto) return alert('Preencha o título e a poesia!');
+
+      const poesias = JSON.parse(localStorage.getItem('poesias')) || [];
+      poesias.push({ titulo, texto });
+      localStorage.setItem('poesias', JSON.stringify(poesias));
+
+      document.getElementById('titulo-poesia').value = '';
+      document.getElementById('texto-poesia').value = '';
+      carregarPoesias();
+    }
+
+    function carregarPoesias() {
+      const lista = document.getElementById('lista-poesias');
+      lista.innerHTML = '';
+      const poesias = JSON.parse(localStorage.getItem('poesias')) || [];
+
+      poesias.forEach(p => {
+        const div = document.createElement('div');
+        div.className = 'poesia-salva';
+        div.innerHTML = `<h3>${p.titulo}</h3><p>${p.texto.replace(/\n/g, '<br>')}</p>`;
+        lista.appendChild(div);
+      });
+    }
+  </script>
+</body>
+</html>
