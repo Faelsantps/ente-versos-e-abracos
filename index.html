@@ -6,7 +6,7 @@
   <title>Entre Versos e Abraços</title>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCv60IjtNiU1XUuNJU63uoJMajy50e8WsY",
@@ -22,27 +22,46 @@
     const db = getFirestore(app);
 
     async function salvarPoesia() {
-      const titulo = document.getElementById('titulo').value;
-      const conteudo = document.getElementById('conteudo').value;
-      if (titulo && conteudo) {
-        await addDoc(collection(db, "poesias"), { titulo, conteudo });
+      const titulo = document.getElementById('titulo').value.trim();
+      const conteudo = document.getElementById('conteudo').value.trim();
+
+      if (!titulo || !conteudo) {
+        alert("Por favor, preencha o título e a poesia.");
+        return;
+      }
+
+      try {
+        await addDoc(collection(db, "poesias"), { 
+          titulo, 
+          conteudo, 
+          data: new Date().toISOString() 
+        });
         document.getElementById('titulo').value = '';
         document.getElementById('conteudo').value = '';
         carregarPoesias();
+      } catch (error) {
+        console.error("Erro ao salvar poesia:", error);
+        alert("Ocorreu um erro ao salvar. Veja o console para mais detalhes.");
       }
     }
 
     async function carregarPoesias() {
       const poesiasSalvas = document.getElementById('poesiasSalvas');
       poesiasSalvas.innerHTML = '';
-      const querySnapshot = await getDocs(collection(db, "poesias"));
-      querySnapshot.forEach((doc) => {
-        const data = doc.data();
-        const div = document.createElement('div');
-        div.className = 'poesia-salva';
-        div.innerHTML = `<h3>${data.titulo}</h3><p>${data.conteudo}</p>`;
-        poesiasSalvas.appendChild(div);
-      });
+      try {
+        const poesiasRef = collection(db, "poesias");
+        const q = query(poesiasRef, orderBy("data", "desc"));
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach((doc) => {
+          const data = doc.data();
+          const div = document.createElement('div');
+          div.className = 'poesia-salva';
+          div.innerHTML = `<h3>${data.titulo}</h3><p>${data.conteudo}</p><small>${data.data ? new Date(data.data).toLocaleString() : ''}</small>`;
+          poesiasSalvas.appendChild(div);
+        });
+      } catch (error) {
+        console.error("Erro ao carregar poesias:", error);
+      }
     }
 
     window.salvarPoesia = salvarPoesia;
@@ -190,5 +209,6 @@
   </script>
 </body>
 </html>
+
 
   <!-- restante do conteúdo continua igual -->
