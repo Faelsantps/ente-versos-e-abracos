@@ -125,4 +125,81 @@
   </style>
 </head>
 <body>
+  <header>
+    <h1>Entre Versos e Abraços</h1>
+    <p class="subtitle">Um cantinho feito com amor para Kimberly Gomes</p>
+    <p class="dedication">Kimberly Gomes, mais conhecida como minha esposa, fiz este site pois sei que passo muito tempo longe por causa do trabalho, então sempre que você sentir saudade eu estarei aqui neste site para você.</p>
+  </header>
+
+  <nav>
+    <button onclick="showSection('poesias')">Escrever Poesias</button>
+    <button onclick="showSection('fotos')">Nossas Fotos</button>
+    <button onclick="showSection('audios')">Ouvir Minha Voz</button>
+  </nav>
+
+  <section id="poesias" class="active">
+    <h2>Escreva sua poesia</h2>
+    <input type="text" id="titulo" placeholder="Título da poesia">
+    <textarea id="conteudo" placeholder="Escreva aqui sua poesia..."></textarea>
+    <button class="save-btn" onclick="salvarPoesia()">Salvar Poesia</button>
+    <div id="poesiasSalvas"></div>
+  </section>
+
+  <section id="fotos">
+    <h2>Nossas Fotos</h2>
+    <div class="carousel">
+      <button class="prev" onclick="mudarFoto(-1)">&#10094;</button>
+      <img id="fotoAtual" src="fotos/foto1.jpg" alt="Foto nossa">
+      <button class="next" onclick="mudarFoto(1)">&#10095;</button>
+    </div>
+    <audio autoplay loop controls>
+      <source src="audios/musica.mp3" type="audio/mpeg">
+      Seu navegador não suporta áudio.
+    </audio>
+  </section>
+
+  <section id="audios">
+    <h2>Minha Voz pra Você</h2>
+    <audio controls>
+      <source src="audios/audio1.mp3" type="audio/mpeg">
+      Seu navegador não suporta áudio.
+    </audio>
+  </section>
+
+  <script>
+    const secoes = document.querySelectorAll('section');
+    function showSection(id) {
+      secoes.forEach(secao => {
+        secao.classList.remove('active');
+      });
+      document.getElementById(id).classList.add('active');
+    }
+
+    function salvarPoesia() {
+      const titulo = document.getElementById('titulo').value;
+      const conteudo = document.getElementById('conteudo').value;
+      if (titulo && conteudo) {
+        const div = document.createElement('div');
+        div.className = 'poesia-salva';
+        div.innerHTML = `<h3>${titulo}</h3><p>${conteudo}</p>`;
+        document.getElementById('poesiasSalvas').appendChild(div);
+        document.getElementById('titulo').value = '';
+        document.getElementById('conteudo').value = '';
+      }
+    }
+
+    const fotos = [
+      'fotos/foto1.jpg',
+      'fotos/foto2.jpg',
+      'fotos/foto3.jpg'
+    ];
+    let fotoIndex = 0;
+    function mudarFoto(direcao) {
+      fotoIndex = (fotoIndex + direcao + fotos.length) % fotos.length;
+      document.getElementById('fotoAtual').src = fotos[fotoIndex];
+    }
+  </script>
+</body>
+</html>
+
   <!-- restante do conteúdo continua igual -->
