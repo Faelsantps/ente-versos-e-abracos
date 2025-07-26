@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Entre Versos e Abraços</title>
   <style>
     body {
@@ -15,7 +15,7 @@
     header {
       background: #9370db; /* roxo claro */
       padding: 2rem;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
     header h1 {
       margin: 0;
@@ -41,6 +41,10 @@
       color: white;
       cursor: pointer;
       font-size: 1rem;
+      transition: background-color 0.3s;
+    }
+    nav button:hover {
+      background: #ba55d3;
     }
     section {
       display: none;
@@ -76,6 +80,10 @@
       font-size: 1rem;
       cursor: pointer;
       margin-bottom: 2rem;
+      transition: background-color 0.3s;
+    }
+    button.save-btn:hover {
+      background-color: #9b30ff;
     }
     .poesia-salva {
       text-align: left;
@@ -86,6 +94,7 @@
       color: #333;
       border-left: 4px solid #9370db;
       border-radius: 10px;
+      word-wrap: break-word;
     }
     .poesia-salva h3 {
       margin: 0 0 0.5rem 0;
@@ -99,19 +108,20 @@
     .carousel img {
       width: 100%;
       border-radius: 10px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
     }
     .carousel button {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      background: rgba(0,0,0,0.5);
+      background: rgba(0, 0, 0, 0.5);
       color: white;
       border: none;
       padding: 0.5rem;
       cursor: pointer;
       font-size: 1.2rem;
       border-radius: 50%;
+      user-select: none;
     }
     .carousel .prev {
       left: 0.5rem;
@@ -121,6 +131,7 @@
     }
     audio {
       margin-top: 1rem;
+      outline: none;
     }
   </style>
 </head>
@@ -128,7 +139,9 @@
   <header>
     <h1>Entre Versos e Abraços</h1>
     <p class="subtitle">Um cantinho feito com amor para Kimberly Gomes</p>
-    <p class="dedication">Kimberly Gomes, mais conhecida como minha esposa, fiz este site pois sei que passo muito tempo longe por causa do trabalho, então sempre que você sentir saudade eu estarei aqui neste site para você.</p>
+    <p class="dedication">
+      Kimberly Gomes, mais conhecida como minha esposa, fiz este site pois sei que passo muito tempo longe por causa do trabalho, então sempre que você sentir saudade eu estarei aqui neste site para você.
+    </p>
   </header>
 
   <nav>
@@ -139,65 +152,75 @@
 
   <section id="poesias" class="active">
     <h2>Escreva sua poesia</h2>
-    <input type="text" id="titulo" placeholder="Título da poesia">
+    <input type="text" id="titulo" placeholder="Título da poesia" />
     <textarea id="conteudo" placeholder="Escreva aqui sua poesia..."></textarea>
     <button class="save-btn" onclick="salvarPoesia()">Salvar Poesia</button>
     <div id="poesiasSalvas"></div>
   </section>
 
- <section id="fotos">
-  <h2>Nossas Fotos</h2>
-  <div class="carousel">
-    <button class="prev" onclick="mudarFoto(-1)">&#10094;</button>
-    <img id="fotoAtual" src="fotos/foto1.jpg" alt="Foto nossa">
-    <button class="next" onclick="mudarFoto(1)">&#10095;</button>
-  </div>
-  <audio controls loop>
-    <source src="audios/musica.mp3" type="audio/mpeg">
-    Seu navegador não suporta áudio.
-  </audio>
-</section>
-
+  <section id="fotos">
+    <h2>Nossas Fotos</h2>
+    <div class="carousel">
+      <button class="prev" onclick="mudarFoto(-1)">&#10094;</button>
+      <img id="fotoAtual" src="fotos/foto1.jpg" alt="Foto nossa" />
+      <button class="next" onclick="mudarFoto(1)">&#10095;</button>
+    </div>
+    <audio controls loop>
+      <source src="audios/musica.mp3" type="audio/mpeg" />
+      Seu navegador não suporta áudio.
+    </audio>
+  </section>
 
   <section id="audios">
     <h2>Minha Voz pra Você</h2>
     <audio controls>
-      <source src="audios/audio1.mp3" type="audio/mpeg">
+      <source src="audios/audio1.mp3" type="audio/mpeg" />
       Seu navegador não suporta áudio.
     </audio>
   </section>
 
   <script>
     const secoes = document.querySelectorAll('section');
+
     function showSection(id) {
-      secoes.forEach(secao => {
+      secoes.forEach((secao) => {
         secao.classList.remove('active');
       });
       document.getElementById(id).classList.add('active');
     }
 
     function salvarPoesia() {
-      const titulo = document.getElementById('titulo').value;
-      const conteudo = document.getElementById('conteudo').value;
-      if (titulo && conteudo) {
-        const div = document.createElement('div');
-        div.className = 'poesia-salva';
-        div.innerHTML = `<h3>${titulo}</h3><p>${conteudo}</p>`;
-        document.getElementById('poesiasSalvas').appendChild(div);
-        document.getElementById('titulo').value = '';
-        document.getElementById('conteudo').value = '';
+      const titulo = document.getElementById('titulo').value.trim();
+      const conteudo = document.getElementById('conteudo').value.trim();
+
+      if (!titulo || !conteudo) {
+        alert('Por favor, preencha o título e o texto da poesia.');
+        return;
       }
+
+      const div = document.createElement('div');
+      div.className = 'poesia-salva';
+
+      const textoFormatado = conteudo.replace(/\n/g, '<br>');
+
+      div.innerHTML = `<h3>${titulo}</h3><p>${textoFormatado}</p>`;
+
+      document.getElementById('poesiasSalvas').appendChild(div);
+
+      document.getElementById('titulo').value = '';
+      document.getElementById('conteudo').value = '';
     }
 
     const fotos = [
       'fotos/foto1.jpg',
       'fotos/foto2.jpg',
-      'fotos/foto3.jpg'
-      'fotos/foto4.jpg'
-      'fotos/foto5.jpg'
-      'fotos/doto6.jpg'
+      'fotos/foto3.jpg',
+      'fotos/foto4.jpg',
+      'fotos/foto5.jpg',
+      'fotos/foto6.jpg'
     ];
     let fotoIndex = 0;
+
     function mudarFoto(direcao) {
       fotoIndex = (fotoIndex + direcao + fotos.length) % fotos.length;
       document.getElementById('fotoAtual').src = fotos[fotoIndex];
@@ -205,5 +228,6 @@
   </script>
 </body>
 </html>
+
 
   <!-- restante do conteúdo continua igual -->
