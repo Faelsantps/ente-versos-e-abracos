@@ -211,14 +211,12 @@
       document.getElementById('conteudo').value = '';
     }
 
-    const fotos = [
-      'fotos/foto1.jpg',
-      'fotos/foto2.jpg',
-      'fotos/foto3.jpg',
-      'fotos/foto4.jpg',
-      'fotos/foto5.jpg',
-      'fotos/foto6.jpg'
-    ];
+    // Agora o array para 26 fotos
+    const fotos = [];
+    for(let i=1; i<=26; i++) {
+      fotos.push(`fotos/foto${i}.jpg`);
+    }
+
     let fotoIndex = 0;
 
     function mudarFoto(direcao) {
@@ -228,6 +226,5 @@
   </script>
 </body>
 </html>
-
 
   <!-- restante do conteúdo continua igual -->
